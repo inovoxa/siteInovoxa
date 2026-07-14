@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>INOVOXA — render</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;background:#05070e;overflow:hidden}
+  #c{display:block;width:100vw;height:auto}
+  #hud{position:fixed;top:8px;left:10px;font:13px monospace;color:#00e5c3;z-index:9}
+</style>
+</head>
+<body>
+<div id="hud">carregando…</div>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>
+const W=1920,H=1080;
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d',{alpha:false});
+const hud=document.getElementById('hud');
+window.__status='loading';
+
+const C={bg:'#05070e',ink:'#eef2f7',mut:'rgba(238,242,247,.68)',dim:'rgba(238,242,247,.46)',
+         teal:'#00e5c3',blue:'#5b7fde',violet:'#8b6cf0',stroke:'rgba(255,255,255,.11)',
+         panel:'rgba(255,255,255,.045)',green:'#25d366'};
+
+/* ── helpers ── */
+function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function grad(x,y,w){const g=ctx.createLinearGradient(x,y,x+w,y);
+  g.addColorStop(0,C.teal);g.addColorStop(.5,'#3fc0e8');g.addColorStop(1,C.blue);return g;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function txt(s,x,y,font,color,base='top',align='left'){ctx.font=font;ctx.fillStyle=color;
+  ctx.textBaseline=base;ctx.textAlign=align;ctx.fillText(s,x,y);}
+
+function btnFilled(x,y,w,h,label){rr(x,y,w,h,14);ctx.fillStyle=grad(x,y,w);ctx.fill();
+  ctx.font='700 24px Inter';ctx.fillStyle='#03110d';ctx.textBaseline='middle';ctx.textAlign='center';
+  ctx.fillText(label,x+w/2,y+h/2+1);}
+function btnOutline(x,y,w,h,label,col){rr(x,y,w,h,14);ctx.fillStyle='rgba(255,255,255,.05)';ctx.fill();
+  ctx.lineWidth=1.5;ctx.strokeStyle=col||C.stroke;ctx.stroke();
+  ctx.font='700 24px Inter';ctx.fillStyle=col?C.teal:C.ink;ctx.textBaseline='middle';ctx.textAlign='center';
+  ctx.fillText(label,x+w/2,y+h/2+1);}
+function pill(x,y,label,ico){ctx.font='600 20px "JetBrains Mono"';
+  const w=ctx.measureText(label).width+ (ico?58:38);const h=44;
+  rr(x,y,w,h,22);ctx.fillStyle='rgba(0,229,195,.08)';ctx.fill();
+  ctx.lineWidth=1;ctx.strokeStyle='rgba(0,229,195,.3)';ctx.stroke();
+  if(ico){ctx.beginPath();ctx.arc(x+24,y+h/2,6,0,7);ctx.fillStyle=C.teal;ctx.fill();}
+  txt(label,x+(ico?42:20),y+h/2,'600 20px "JetBrains Mono"',C.teal,'middle');return w;}
+function label(s,x,y){ // "01 — TÍTULO"
+  ctx.font='600 20px "JetBrains Mono"';ctx.textBaseline='middle';ctx.textAlign='left';
+  const parts=s.split(' — ');ctx.fillStyle=C.dim;ctx.fillText(parts[0],x,y);
+  const wn=ctx.measureText(parts[0]+'  ').width;
+  ctx.strokeStyle='rgba(0,229,195,.5)';ctx.lineWidth=1.5;ctx.beginPath();
+  ctx.moveTo(x+wn,y);ctx.lineTo(x+wn+52,y);ctx.stroke();
+  ctx.fillStyle=C.teal;ctx.fillText(parts[1],x+wn+68,y);}
+function checkbox(x,y){rr(x,y,26,26,8);ctx.fillStyle='rgba(0,229,195,.12)';ctx.fill();
+  ctx.strokeStyle='rgba(0,229,195,.5)';ctx.lineWidth=1.4;ctx.stroke();
+  ctx.strokeStyle=C.teal;ctx.lineWidth=2.6;ctx.beginPath();
+  ctx.moveTo(x+7,y+13);ctx.lineTo(x+11,y+18);ctx.lineTo(x+19,y+8);ctx.stroke();}
+
+/* ── HEIGHTFIELD (fundo contínuo) ── */
+function heightAt(x,z,t){return Math.sin(x*0.9+t*0.7)*0.55+Math.sin(z*0.7-t*0.45)*0.75
+  +Math.sin((x+z)*0.45+t*0.32)*0.9+Math.sin(Math.hypot(x,z)*0.6-t*0.6)*0.45;}
+function drawField(t){
+  ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);
+  const cols=72,rows=32,horizon=H*0.46,camY=3.3,fov=H*0.98;
+  for(let zi=rows;zi>=1;zi--){
+    const z=zi*0.8+1.3,depth=zi/rows;
+    ctx.beginPath();
+    for(let xi=0;xi<=cols;xi++){
+      const x=(xi/cols-0.5)*42;
+      const y=heightAt(x*0.4,z,t)*(0.6+depth*1.3);
+      const sx=W/2+(x/z)*fov*0.55;
+      const sy=horizon+((camY-y)/z)*fov*0.5;
+      xi?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy);
+    }
+    const a=(0.02+(1-depth)*0.13),hue=168+depth*55;
+    ctx.strokeStyle=`hsla(${hue},85%,${52-depth*14}%,${a})`;
+    ctx.lineWidth=1.1-depth*0.5;ctx.stroke();
+    if(zi%3===0){for(let xi=0;xi<=cols;xi+=6){
+      const x=(xi/cols-0.5)*42;
+      const zn=(zi+1)*0.8+1.3,dn=(zi+1)/rows;
+      const y1=heightAt(x*0.4,z,t)*(0.6+depth*1.3);
+      const y2=heightAt(x*0.4,zn,t)*(0.6+dn*1.3);
+      const s1x=W/2+(x/z)*fov*0.55,s1y=horizon+((camY-y1)/z)*fov*0.5;
+      const s2x=W/2+(x/zn)*fov*0.55,s2y=horizon+((camY-y2)/zn)*fov*0.5;
+      ctx.beginPath();ctx.moveTo(s1x,s1y);ctx.lineTo(s2x,s2y);
+      ctx.strokeStyle=`hsla(${hue},85%,48%,${a*0.5})`;ctx.lineWidth=0.6;ctx.stroke();}}
+  }
+  // brilho no horizonte
+  const g=ctx.createRadialGradient(W/2,horizon,0,W/2,horizon,W*0.5);
+  g.addColorStop(0,'rgba(0,229,195,.06)');g.addColorStop(1,'rgba(0,229,195,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // vinheta lateral p/ legibilidade
+  const v=ctx.createLinearGradient(0,0,W,0);
+  v.addColorStop(0,'rgba(5,7,14,.72)');v.addColorStop(.5,'rgba(5,7,14,.25)');v.addColorStop(1,'rgba(5,7,14,.72)');
+  ctx.fillStyle=v;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(5,7,14,.35)';ctx.fillRect(0,0,W,H*0.14);
+  ctx.fillRect(0,H*0.86,W,H*0.14);
+}
+
+/* ── imagens ── */
+function loadImg(src){return new Promise(res=>{const i=new Image();i.crossOrigin='anonymous';
+  i.onload=()=>res(i);i.onerror=()=>res(null);i.src=src;});}
+let LOGO=null,FOTO=null;
+
+/* agente chips */
+const AG=[['💬','Agente de Atendimento','respondendo 3 clientes…'],
+          ['🎯','Agente SDR','lead qualificado · score 92'],
+          ['📄','Agente de Propostas','proposta #148 enviada ✓'],
+          ['🔁','Agente de Follow-up','retomando conversa das 14h']];
+function chip(x,y,w,ico,ttl,sub,al){ctx.save();ctx.globalAlpha*=al;
+  rr(x,y,w,72,14);ctx.fillStyle='rgba(6,10,20,.82)';ctx.fill();
+  ctx.lineWidth=1;ctx.strokeStyle='rgba(0,229,195,.24)';ctx.stroke();
+  txt(ico,x+18,y+36,'30px Inter','#fff','middle');
+  txt(ttl,x+64,y+26,'700 20px Sora',C.ink,'middle');
+  txt(sub,x+64,y+50,'400 17px "JetBrains Mono"',C.teal,'middle');ctx.restore();}
+
+/* ══ SLIDE 1 — HERO (11s) ══ */
+function drawHero(lt,fin){
+  const dx=(1-fin)*38;ctx.save();ctx.translate(0,dx);
+  if(LOGO){const lw=190,lh=lw*LOGO.height/LOGO.width;ctx.drawImage(LOGO,140,72,lw,lh);}
+  pill(140,150,'Agentes de IA operando 24/7',true);
+  txt('Uma equipe inteira de',140,250,'800 74px Sora',C.ink);
+  txt('agentes de IA',140,340,'800 74px Sora',grad(140,0,430));
+  txt('trabalhando pelo seu',140,430,'800 74px Sora',C.ink);
+  txt('crescimento.',140,520,'800 74px Sora',C.ink);
+  txt('Agentes de IA que atendem clientes, qualificam leads, emitem',140,630,'400 27px Inter',C.mut);
+  txt('propostas e fazem follow-up — integrados ao seu WhatsApp e CRM.',140,668,'400 27px Inter',C.mut);
+  btnFilled(140,730,300,64,'Testar Grátis por 7 Dias');
+  btnOutline(460,730,300,64,'Agendar Demonstração');
+  // chips flutuando à direita
+  const bx=1230,bw=520;
+  for(let i=0;i<AG.length;i++){
+    const fy=Math.sin(lt*1.1+i*1.3)*8;
+    const ap=easeOut(clamp((lt-0.3-i*0.35)/0.6,0,1));
+    chip(bx,250+i*116+fy,bw,AG[i][0],AG[i][1],AG[i][2],ap);
+  }
+  ctx.restore();
+}
+
+/* ══ SLIDE 2 — AGENTE DE VENDAS (20s) ══ */
+const WA=[['in','Oi, vocês ainda estão atendendo? Queria automatizar o atendimento da loja',0.4],
+  ['out','Olá! 👋 Por aqui o atendimento nunca fecha. Já posso montar seu orçamento. Quantos atendimentos por dia?',1.8],
+  ['in','Uns 80 por dia, mas só respondo metade 😩',3.6],
+  ['out','Com esse volume dá pra responder 100% em segundos e qualificar cada lead. Qual seu nome e segmento?',5.0],
+  ['in','Marcos, loja de móveis planejados',7.0],
+  ['out','Perfeito, Marcos! ✅ Proposta gerada. Agendo uma demonstração amanhã às 10h?',8.4],
+  ['in','Fica ótimo 👍',10.4],
+  ['out','Agendado! 🗓️ Convite no seu WhatsApp. Boa noite, Marcos!',11.6]];
+function wrap(s,max){ctx.font='400 19px Inter';const words=s.split(' ');let line='',out=[];
+  for(const w of words){if(ctx.measureText(line+w).width>max){out.push(line.trim());line='';}line+=w+' ';}
+  out.push(line.trim());return out;}
+function drawVendas(lt,fin){
+  const dx=(1-fin)*38;ctx.save();ctx.translate(0,dx);
+  label('01 — AGENTE DE VENDAS',140,150);
+  txt('Seu melhor vendedor',140,220,'800 58px Sora',C.ink);
+  txt('trabalhando ',140,292,'800 58px Sora',C.ink);
+  const wtr=ctx.measureText('trabalhando ').width;
+  txt('24 horas por dia.',140+wtr,292,'800 58px Sora',grad(140+wtr,0,470));
+  const items=[['Resposta em segundos, a qualquer hora','Assume a conversa no instante em que o cliente chama.'],
+    ['Qualificação automática de leads','Identifica orçamento, urgência e perfil antes do time.'],
+    ['Propostas e agendamentos sem intervenção','Gera propostas e agenda reuniões no seu CRM.']];
+  let yy=400;
+  for(const it of items){checkbox(140,yy);
+    txt(it[0],185,yy+2,'700 25px Inter',C.ink);
+    txt(it[1],185,yy+34,'400 21px Inter',C.dim);yy+=104;}
+  // telefone à direita
+  const px=1250,py=150,pw=430,ph=780;
+  rr(px,py,pw,ph,44);ctx.fillStyle='#0b0f17';ctx.fill();
+  ctx.lineWidth=2;ctx.strokeStyle='rgba(255,255,255,.14)';ctx.stroke();
+  // header whatsapp
+  rr(px+8,py+8,pw-16,86,20);ctx.fillStyle='#111b21';ctx.fill();
+  ctx.beginPath();ctx.arc(px+56,py+52,24,0,7);ctx.fillStyle=grad(px+32,0,48);ctx.fill();
+  txt('IN',px+56,py+53,'800 20px Sora','#03110d','middle','center');
+  txt('Inovoxa · Vendas',px+92,py+42,'700 23px Inter',C.ink);
+  txt('online',px+92,py+68,'400 18px Inter','#31da85');
+  // bolhas
+  ctx.save();rr(px+8,py+100,pw-16,ph-108,4);ctx.clip();
+  ctx.fillStyle='#0b141a';ctx.fillRect(px+8,py+100,pw-16,ph);
+  let by=py+120;
+  for(const m of WA){
+    if(lt<m[2])break;
+    const ap=easeOut(clamp((lt-m[2])/0.35,0,1));
+    const lines=wrap(m[1],pw-120);
+    const bh=lines.length*26+26;
+    const bw=Math.min(pw-70,Math.max(...lines.map(l=>ctx.measureText(l).width))+34);
+    const bx=m[0]==='out'?px+pw-24-bw:px+24;
+    ctx.save();ctx.globalAlpha=ap;
+    rr(bx,by,bw,bh,12);ctx.fillStyle=m[0]==='out'?'#005c4b':'#202c33';ctx.fill();
+    ctx.fillStyle='#e9edef';ctx.font='400 19px Inter';ctx.textAlign='left';ctx.textBaseline='top';
+    lines.forEach((l,i)=>ctx.fillText(l,bx+17,by+12+i*26));
+    ctx.restore();
+    by+=bh+14;
+  }
+  ctx.restore();
+  ctx.restore();
+}
+
+/* ══ SLIDE 3 — EQUIPE DIGITAL (8s) ══ */
+const TEAM=[['💬','Atendimento','Agente de Atendimento'],['🎯','Vendas','Agente SDR'],
+  ['📄','Propostas','Agente de Propostas'],['🔁','Follow-up','Agente de Follow-up'],
+  ['🗂️','Operações','Agente de CRM'],['🧠','Conhecimento','Agente de Conhecimento']];
+function drawEquipe(lt,fin){
+  const dx=(1-fin)*38;ctx.save();ctx.translate(0,dx);
+  label('02 — A EQUIPE DIGITAL',140,140);
+  txt('Cada agente domina ',140,210,'800 54px Sora',C.ink);
+  const wc=ctx.measureText('Cada agente domina ').width;
+  txt('uma função.',140+wc,210,'800 54px Sora',grad(140+wc,0,340));
+  txt('Um time de especialistas digitais treinados no seu negócio, trabalhando em rede.',140,278,'400 25px Inter',C.mut);
+  const gx=140,gy=350,gw=(W-280-2*28)/3,gh=200;
+  for(let i=0;i<6;i++){
+    const col=i%3,row=(i/3)|0;
+    const x=gx+col*(gw+28),y=gy+row*(gh+28);
+    const ap=easeOut(clamp((lt-0.2-i*0.12)/0.5,0,1));
+    ctx.save();ctx.globalAlpha=ap;ctx.translate(0,(1-ap)*20);
+    rr(x,y,gw,gh,18);ctx.fillStyle=C.panel;ctx.fill();
+    ctx.lineWidth=1;ctx.strokeStyle=C.stroke;ctx.stroke();
+    rr(x+30,y+30,58,58,15);ctx.fillStyle='rgba(0,229,195,.09)';ctx.fill();
+    ctx.strokeStyle='rgba(0,229,195,.24)';ctx.stroke();
+    txt(TEAM[i][0],x+59,y+60,'30px Inter','#fff','middle','center');
+    txt(TEAM[i][1].toUpperCase(),x+gw-30,y+52,'600 15px "JetBrains Mono"',C.dim,'middle','right');
+    txt(TEAM[i][2],x+30,y+128,'700 27px Sora',C.ink);
+    rr(x+30,y+165,gw-60,4,2);ctx.fillStyle='rgba(255,255,255,.08)';ctx.fill();
+    const mw=(gw-60)*[.96,.88,.80,.73,1,.91][i]*ap;
+    rr(x+30,y+165,mw,4,2);ctx.fillStyle=grad(x+30,0,gw-60);ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+/* ══ SLIDE 4 — QUEM ESTÁ POR TRÁS (10s) ══ */
+function drawSobre(lt,fin){
+  const dx=(1-fin)*38;ctx.save();ctx.translate(0,dx);
+  label('06 — QUEM ESTÁ POR TRÁS',140,140);
+  // foto
+  const fx=140,fy=210,fw=560,fh=680;
+  ctx.save();rr(fx,fy,fw,fh,22);ctx.clip();
+  if(FOTO){const s=Math.max(fw/FOTO.width,fh/FOTO.height);
+    const iw=FOTO.width*s,ih=FOTO.height*s;
+    ctx.drawImage(FOTO,fx+(fw-iw)/2,fy+(fh-ih)/2,iw,ih);}
+  else{ctx.fillStyle='#111';ctx.fillRect(fx,fy,fw,fh);}
+  ctx.restore();
+  rr(fx+22,fy+fh-98,fw-44,76,14);ctx.fillStyle='rgba(4,6,13,.8)';ctx.fill();
+  ctx.lineWidth=1;ctx.strokeStyle='rgba(0,229,195,.22)';ctx.stroke();
+  txt('Fabrício Muaca Miguel',fx+44,fy+fh-70,'700 26px Sora',C.ink);
+  txt('Co-fundador & CEO — INOVOXA',fx+44,fy+fh-40,'400 20px Inter',C.teal);
+  // copy
+  const tx=770;
+  txt('Engenharia de verdade,',tx,290,'800 54px Sora',C.ink);
+  txt('não hype.',tx,360,'800 54px Sora',grad(tx,0,270));
+  const bio=['Analista de Sistemas com MBA em Tecnologia e Inovação pela','UFSCar e 9 anos de experiência em TI. A missão: democratizar','a inteligência artificial aplicada, com sistemas em produção','integrados aos processos reais de cada empresa.'];
+  bio.forEach((l,i)=>txt(l,tx,460+i*40,'400 26px Inter',C.mut));
+  const stats=[['9+','anos em TI'],['50+','projetos entregues'],['24/7','suporte a clientes'],['100%','foco em resultado']];
+  const sw=200,sgap=24;
+  stats.forEach((s,i)=>{const x=tx+i*(sw+sgap);const y=650;
+    const ap=easeOut(clamp((lt-0.3-i*0.12)/0.5,0,1));
+    ctx.save();ctx.globalAlpha=ap;
+    rr(x,y,sw,150,16);ctx.fillStyle=C.panel;ctx.fill();
+    ctx.lineWidth=1;ctx.strokeStyle=C.stroke;ctx.stroke();
+    txt(s[0],x+sw/2,y+58,'800 46px Sora',grad(x+30,0,sw-60),'middle','center');
+    txt(s[1],x+sw/2,y+108,'400 19px Inter',C.dim,'middle','center');ctx.restore();});
+  ctx.restore();
+}
+
+/* ══ SLIDE 5 — CTA FINAL (10s) ══ */
+function drawCTA(lt,fin){
+  const sc=0.96+easeOut(clamp(lt/0.7,0,1))*0.04;
+  ctx.save();ctx.translate(W/2,H/2);ctx.scale(sc,sc);ctx.translate(-W/2,-H/2);
+  const bx=280,by=230,bw=W-560,bh=620;
+  rr(bx,by,bw,bh,32);
+  const bg=ctx.createLinearGradient(bx,by,bx+bw,by+bh);
+  bg.addColorStop(0,'rgba(0,229,195,.09)');bg.addColorStop(1,'rgba(91,127,222,.09)');
+  ctx.fillStyle=bg;ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle='rgba(0,229,195,.22)';ctx.stroke();
+  const g=ctx.createRadialGradient(W/2,by+40,0,W/2,by+40,bw*0.5);
+  g.addColorStop(0,'rgba(0,229,195,.12)');g.addColorStop(1,'rgba(0,229,195,0)');
+  ctx.fillStyle=g;ctx.save();rr(bx,by,bw,bh,32);ctx.clip();ctx.fillRect(bx,by,bw,bh);ctx.restore();
+  txt('Pronto para ter uma equipe de IA',W/2,by+140,'800 60px Sora',C.ink,'middle','center');
+  txt('trabalhando por você?',W/2,by+215,'800 60px Sora',grad(W/2-330,0,660),'middle','center');
+  txt('Comece com 7 dias grátis ou agende uma demonstração — em 30 minutos',W/2,by+300,'400 27px Inter',C.mut,'middle','center');
+  txt('você vê os agentes operando cenários reais do seu negócio.',W/2,by+338,'400 27px Inter',C.mut,'middle','center');
+  btnFilled(W/2-330,by+390,320,66,'Testar Grátis por 7 Dias');
+  btnOutline(W/2+10,by+390,320,66,'Agendar Demonstração');
+  txt('📱  (16) 98124-9881       ✉  suporte@inovoxa.com.br',W/2,by+512,'500 24px Inter',C.mut,'middle','center');
+  if(LOGO){const lw=170,lh=lw*LOGO.height/LOGO.width;ctx.globalAlpha=.85;
+    ctx.drawImage(LOGO,W/2-lw/2,by+552,lw,lh);ctx.globalAlpha=1;}
+  ctx.restore();
+}
+
+/* ── timeline ── */
+const SLIDES=[{d:11,f:drawHero},{d:20,f:drawVendas},{d:8,f:drawEquipe},{d:10,f:drawSobre},{d:10,f:drawCTA}];
+const TOTAL=SLIDES.reduce((a,s)=>a+s.d,0);
+const FADE=0.6;
+
+function render(el){
+  drawField(el*1.0);
+  let acc=0,idx=0,lt=0;
+  for(let i=0;i<SLIDES.length;i++){if(el<acc+SLIDES[i].d){idx=i;lt=el-acc;break;}acc+=SLIDES[i].d;}
+  if(el>=TOTAL){idx=SLIDES.length-1;lt=SLIDES[idx].d;}
+  const d=SLIDES[idx].d;
+  let alpha=1,fin=1;
+  if(lt<FADE){alpha=easeOut(lt/FADE);fin=alpha;}
+  if(lt>d-FADE){alpha=easeOut(clamp((d-lt)/FADE,0,1));}
+  ctx.save();ctx.globalAlpha=alpha;
+  SLIDES[idx].f(lt,fin);
+  ctx.restore();
+  // barra de progresso
+  const pw=(W-280)*(el/TOTAL);
+  ctx.fillStyle='rgba(255,255,255,.08)';ctx.fillRect(140,H-46,W-280,4);
+  rr(140,H-46,Math.max(0,pw),4,2);ctx.fillStyle=grad(140,0,W-280);ctx.fill();
+  for(let i=0,x=140;i<SLIDES.length;i++){x+=(SLIDES[i].d/TOTAL)*(W-280);
+    ctx.beginPath();ctx.arc(clamp(x,140,W-140),H-44,3,0,7);
+    ctx.fillStyle='rgba(255,255,255,.25)';ctx.fill();}
+}
+
+async function main(){
+  try{
+    await document.fonts.load('800 74px "Sora"');
+    await document.fonts.load('700 26px "Sora"');
+    await document.fonts.load('600 24px "Inter"');
+    await document.fonts.load('400 26px "Inter"');
+    await document.fonts.load('600 20px "JetBrains Mono"');
+    await document.fonts.ready;
+  }catch(e){}
+  LOGO=await loadImg('/_logo.png');
+  FOTO=await loadImg('/foto%20fabricio.jpg');
+  render(0.01);
+  // grava
+  let mime='video/webm;codecs=vp9';
+  if(!MediaRecorder.isTypeSupported(mime))mime='video/webm;codecs=vp8';
+  if(!MediaRecorder.isTypeSupported(mime))mime='video/webm';
+  const stream=canvas.captureStream(30);
+  const rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:14000000});
+  const chunks=[];
+  rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
+  rec.onstop=async()=>{
+    const blob=new Blob(chunks,{type:'video/webm'});
+    window.__status='uploading';hud.textContent='enviando '+(blob.size/1e6).toFixed(1)+'MB…';
+    try{await fetch('/save',{method:'POST',body:blob});window.__status='done';hud.textContent='pronto ✓';}
+    catch(e){window.__status='error:'+e.message;hud.textContent='ERRO '+e.message;}
+  };
+  rec.start();
+  window.__status='recording';
+  const t0=performance.now();
+  function frame(now){
+    const el=(now-t0)/1000;
+    render(Math.min(el,TOTAL));
+    hud.textContent='gravando '+el.toFixed(1)+'/'+TOTAL+'s';
+    if(el>=TOTAL){setTimeout(()=>rec.stop(),120);return;}
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+main();
+</script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="INOVOXA — Agentes de IA que atendem, qualificam e vendem 24h por dia pelo WhatsApp. Automação de atendimento, vendas e operações para empresas em crescimento.">
+<meta name="keywords" content="Agentes de IA, Inteligência Artificial, Chatbot, WhatsApp, Automação, Vendas, CRM, Araraquara">
+<meta property="og:title" content="INOVOXA — Agentes de IA que vendem por você, 24h por dia">
+<meta property="og:description" content="Uma equipe inteira de agentes de IA atendendo, qualificando leads e fechando oportunidades enquanto você foca no crescimento.">
+<meta property="og:type" content="website">
+<title>INOVOXA — Agentes de IA que vendem por você, 24h por dia</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ═══ HEIGHTFIELD BACKGROUND ═══ -->
+<canvas id="heightfield" aria-hidden="true"></canvas>
+
+<!-- ═══ NAV ═══ -->
+<header id="nav">
+  <div class="nav-inner">
+    <a href="#inicio" class="nav-logo" aria-label="INOVOXA — início">
+      <img src="_logo.png" alt="INOVOXA">
+    </a>
+    <nav>
+      <ul id="nav-ul">
+        <li><a href="#agentes">Agentes</a></li>
+        <li><a href="#vendedor">Vendas 24h</a></li>
+        <li><a href="#cases">Cases</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#demo" class="nav-cta">Agendar Demonstração</a></li>
+      </ul>
+    </nav>
+    <button class="hamburger" id="hbg" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section id="inicio" class="hero">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <div class="hero-status rv">
+        <span class="pulse-dot"></span>
+        <span id="hero-ticker">Agente de atendimento respondeu um lead há 9s</span>
+      </div>
+      <h1 class="rv d1">Uma equipe inteira de <em class="grad">agentes de IA</em> trabalhando pelo seu crescimento.</h1>
+      <p class="hero-sub rv d2">A INOVOXA implanta agentes de inteligência artificial que atendem clientes, qualificam leads, emitem propostas e fazem follow-up — integrados ao seu WhatsApp, CRM e sistemas. Sua operação nunca mais para.</p>
+      <div class="hero-btns rv d3">
+        <a href="https://chat.inovoxa.com.br/" target="_blank" rel="noopener" class="btn btn-p">Testar Grátis por 7 Dias<svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="#demo" class="btn btn-s">Agendar Demonstração</a>
+      </div>
+      <div class="hero-proof rv d4">
+        <div><strong data-count="3">0</strong><span>segundos para<br>responder um lead</span></div>
+        <div><strong data-count="24" data-suffix="/7">0</strong><span>operação<br>ininterrupta</span></div>
+        <div><strong data-count="95" data-suffix="%">0</strong><span>menos tarefas<br>repetitivas</span></div>
+      </div>
+    </div>
+
+    <div class="hero-scene rv d2" id="hero-scene">
+      <div class="scene-frame">
+        <div class="scene-bar">
+          <span class="scene-dot"></span><span class="scene-dot"></span><span class="scene-dot"></span>
+          <span class="scene-title">inovoxa · sala de operações IA</span>
+          <span class="scene-live"><span class="pulse-dot"></span>AO VIVO</span>
+        </div>
+        <div class="scene-media">
+          <video id="hero-video" autoplay muted loop playsinline preload="metadata">
+            <source src="assets/media/hero.mp4" type="video/mp4">
+          </video>
+          <div class="scene-fallback" aria-hidden="true"></div>
+          <div class="scene-glow" aria-hidden="true"></div>
+        </div>
+        <!-- Agentes flutuando sobre a cena -->
+        <div class="agent-chip chip-1"><span class="chip-ico">💬</span><span class="chip-txt"><strong>Agente de Atendimento</strong><em>respondendo 3 clientes…</em></span></div>
+        <div class="agent-chip chip-2"><span class="chip-ico">🎯</span><span class="chip-txt"><strong>Agente SDR</strong><em>lead qualificado · score 92</em></span></div>
+        <div class="agent-chip chip-3"><span class="chip-ico">📄</span><span class="chip-txt"><strong>Agente de Propostas</strong><em>proposta #148 enviada ✓</em></span></div>
+        <div class="agent-chip chip-4"><span class="chip-ico">🔁</span><span class="chip-txt"><strong>Agente de Follow-up</strong><em>retomando conversa das 14h</em></span></div>
+      </div>
+    </div>
+
+  </div>
+  <a class="hero-scroll" href="#vendedor" aria-label="Rolar para a próxima seção"><span></span></a>
+</section>
+
+<!-- ═══ VENDEDOR 24H / WHATSAPP ═══ -->
+<section id="vendedor" class="sec">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">01</span><span class="sec-line"></span><span>Agente de Vendas</span></div>
+    <div class="split">
+
+      <div class="split-copy">
+        <h2 class="rv">Seu melhor vendedor trabalhando <em class="grad">24 horas por dia.</em></h2>
+        <p class="lead rv d1">Enquanto sua equipe descansa, a IA responde, qualifica e fecha oportunidades automaticamente pelo WhatsApp. Sem fila de espera, sem lead esfriando, sem oportunidade perdida de madrugada.</p>
+        <ul class="checks rv d2">
+          <li><span class="chk"></span><div><strong>Resposta em segundos, a qualquer hora</strong><p>O agente assume a conversa no instante em que o cliente chama — inclusive fins de semana e feriados.</p></div></li>
+          <li><span class="chk"></span><div><strong>Qualificação automática de leads</strong><p>Perguntas inteligentes identificam orçamento, urgência e perfil antes de acionar seu time comercial.</p></div></li>
+          <li><span class="chk"></span><div><strong>Propostas e agendamentos sem intervenção</strong><p>Gera propostas personalizadas, agenda reuniões e registra tudo no seu CRM automaticamente.</p></div></li>
+        </ul>
+        <div class="split-ctas rv d3">
+          <a href="https://chat.inovoxa.com.br/" target="_blank" rel="noopener" class="btn btn-p">Testar Grátis por 7 Dias</a>
+          <a href="#demo" class="btn btn-o">Ver funcionando na prática</a>
+        </div>
+      </div>
+
+      <div class="phone-wrap rv d2">
+        <div class="phone" id="phone">
+          <div class="phone-notch"></div>
+          <div class="wa-head">
+            <span class="wa-back"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <span class="wa-avatar">IN</span>
+            <span class="wa-id"><strong>Inovoxa · Vendas</strong><em id="wa-status">online</em></span>
+            <span class="wa-icons">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1v-3.5l4 4v-11l-4 4z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.4 11.4 0 003.57.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.57 3.57 1 1 0 01-.25 1.01l-2.2 2.21z"/></svg>
+            </span>
+          </div>
+          <div class="wa-chat" id="wa-chat">
+            <div class="wa-day">Hoje</div>
+          </div>
+          <div class="wa-foot">
+            <span class="wa-input">Mensagem</span>
+            <span class="wa-mic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 003-3V6a3 3 0 10-6 0v5a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.92V21h2v-3.08A7 7 0 0019 11h-2z"/></svg></span>
+          </div>
+        </div>
+        <div class="phone-badge" id="phone-badge">
+          <span class="pulse-dot"></span>
+          <span>Lead qualificado e reunião agendada — <strong>sem intervenção humana</strong></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ AGENTES ═══ -->
+<section id="agentes" class="sec sec-alt">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">02</span><span class="sec-line"></span><span>A Equipe Digital</span></div>
+    <div class="sec-hd rv">
+      <h2>Cada agente domina <em class="grad">uma função.</em><br>Juntos, operam a empresa inteira.</h2>
+      <p>Não é um chatbot genérico: é um time de especialistas digitais, treinados nos dados e processos do seu negócio, trabalhando em rede.</p>
+    </div>
+    <div class="agents-grid">
+      <article class="agent rv"><div class="agent-top"><span class="agent-ico">💬</span><span class="agent-tag">Atendimento</span></div><h3>Agente de Atendimento</h3><p>Responde clientes em linguagem natural no WhatsApp, Instagram e site. Resolve dúvidas, consulta pedidos e escala para humanos quando necessário.</p><div class="agent-meter"><span style="--w:96%"></span><em>96% de resoluções sem humano</em></div></article>
+      <article class="agent rv d1"><div class="agent-top"><span class="agent-ico">🎯</span><span class="agent-tag">Vendas</span></div><h3>Agente SDR</h3><p>Aborda, qualifica e pontua cada lead com perguntas estratégicas. Só passa para o seu comercial quem está pronto para comprar.</p><div class="agent-meter"><span style="--w:88%"></span><em>+88% de leads respondidos em até 1 min</em></div></article>
+      <article class="agent rv d2"><div class="agent-top"><span class="agent-ico">📄</span><span class="agent-tag">Propostas</span></div><h3>Agente de Propostas</h3><p>Monta propostas e orçamentos personalizados na hora, com base no catálogo, tabela de preços e regras comerciais da sua empresa.</p><div class="agent-meter"><span style="--w:80%"></span><em>proposta pronta em menos de 2 min</em></div></article>
+      <article class="agent rv"><div class="agent-top"><span class="agent-ico">🔁</span><span class="agent-tag">Follow-up</span></div><h3>Agente de Follow-up</h3><p>Nenhum lead esquecido: retoma conversas paradas, confirma reuniões e nutre contatos com a cadência certa, sem parecer robô.</p><div class="agent-meter"><span style="--w:73%"></span><em>+73% de conversas reativadas</em></div></article>
+      <article class="agent rv d1"><div class="agent-top"><span class="agent-ico">🗂️</span><span class="agent-tag">Operações</span></div><h3>Agente de CRM</h3><p>Registra cada interação, move oportunidades no funil e mantém seu CRM sempre atualizado — integrado a ERP e sistemas internos.</p><div class="agent-meter"><span style="--w:100%"></span><em>100% das interações registradas</em></div></article>
+      <article class="agent rv d2"><div class="agent-top"><span class="agent-ico">🧠</span><span class="agent-tag">Conhecimento</span></div><h3>Agente de Conhecimento</h3><p>Treinado nos documentos, manuais e histórico da empresa. Responde equipe e clientes com a informação certa, com controle de acesso.</p><div class="agent-meter"><span style="--w:91%"></span><em>respostas com fonte auditável</em></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMO FUNCIONA ═══ -->
+<section id="processo" class="sec">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">03</span><span class="sec-line"></span><span>Implantação</span></div>
+    <div class="sec-hd rv">
+      <h2>Do diagnóstico ao agente operando: <em class="grad">em semanas, não meses.</em></h2>
+    </div>
+    <div class="timeline">
+      <div class="tl-item rv"><span class="tl-n">1</span><h3>Diagnóstico</h3><p>Mapeamos seu atendimento, funil de vendas e sistemas em uma reunião de 30 minutos. Você recebe uma proposta com ROI estimado em 24h.</p><em class="tl-time">Dia 1</em></div>
+      <div class="tl-item rv d1"><span class="tl-n">2</span><h3>Treinamento da IA</h3><p>Os agentes são treinados no seu catálogo, tom de voz e regras de negócio, e integrados ao WhatsApp, CRM e sistemas internos.</p><em class="tl-time">Semanas 1–2</em></div>
+      <div class="tl-item rv d2"><span class="tl-n">3</span><h3>Operação assistida</h3><p>Os agentes entram em produção com supervisão humana. Ajustamos respostas e fluxos com dados reais do seu público.</p><em class="tl-time">Semanas 2–3</em></div>
+      <div class="tl-item rv d3"><span class="tl-n">4</span><h3>Escala</h3><p>Operação 24/7 com relatórios de conversão, novos agentes por demanda e evolução contínua dos fluxos.</p><em class="tl-time">Contínuo</em></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CASES ═══ -->
+<section id="cases" class="sec sec-alt">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">04</span><span class="sec-line"></span><span>Cases Reais</span></div>
+    <div class="sec-hd rv">
+      <h2>Tecnologia que já opera em <em class="grad">produção.</em></h2>
+      <p>Projetos entregues para empresas e instituições públicas — não são conceitos, são sistemas rodando todos os dias.</p>
+    </div>
+    <div class="cases-grid">
+      <article class="case rv">
+        <span class="case-tag">Setor Público</span>
+        <h3>GLPI + WhatsApp · Prefeitura de Araraquara</h3>
+        <p>Central de chamados de TI com atendimento por IA no WhatsApp: abertura, acompanhamento e resolução de tickets integrados ao GLPI, com automação de Active Directory.</p>
+        <div class="case-kpi"><strong>-60%</strong><span>no tempo de atendimento</span></div>
+        <div class="badges"><span>GLPI</span><span>WhatsApp API</span><span>n8n</span><span>PostgreSQL</span></div>
+      </article>
+      <article class="case rv d1">
+        <span class="case-tag">Plataforma SaaS</span>
+        <h3>Inovoxa Chat · Omnichannel com IA</h3>
+        <p>Plataforma própria de atendimento multicanal: WhatsApp, Instagram e e-mail em um só lugar, com agentes de IA e atendimento humano trabalhando juntos.</p>
+        <div class="case-kpi"><strong>24/7</strong><span>atendimento contínuo</span></div>
+        <div class="badges"><span>React</span><span>Node.js</span><span>Claude AI</span><span>CRM</span></div>
+      </article>
+      <article class="case rv d2">
+        <span class="case-tag">IA Empresarial</span>
+        <h3>Assistentes treinados na sua empresa</h3>
+        <p>Agentes conectados a documentos, PDFs e sistemas internos via RAG — como um colaborador que conhece tudo da operação e nunca sai de férias.</p>
+        <div class="case-kpi"><strong>100%</strong><span>com controle de acesso</span></div>
+        <div class="badges"><span>RAG</span><span>LLM</span><span>Vector DB</span><span>API</span></div>
+      </article>
+      <article class="case rv d3">
+        <span class="case-tag">Varejo & Delivery</span>
+        <h3>PDV + Totem de autoatendimento</h3>
+        <p>Ponto de venda integrado a totems com IA e terminais de pagamento. Menos fila, mais venda, estoque e fidelidade controlados em tempo real.</p>
+        <div class="case-kpi"><strong>+ vendas</strong><span>sem aumentar equipe</span></div>
+        <div class="badges"><span>React Native</span><span>Pix</span><span>ERP</span><span>MongoDB</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DEMO / AGENDAMENTO ═══ -->
+<section id="demo" class="sec">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">05</span><span class="sec-line"></span><span>Demonstração</span></div>
+    <div class="sched-inner">
+      <div class="sched-info rv">
+        <h2>Veja os agentes trabalhando <em class="grad">no seu negócio.</em></h2>
+        <p>Em 30 minutos, online e sem custo: entendemos sua operação, mostramos os agentes em ação e você recebe uma proposta com ROI estimado em até 24h.</p>
+        <ul class="steps">
+          <li><span class="sn">1</span><div><strong>Escolha data e horário</strong><em>Slots disponíveis de segunda a sexta</em></div></li>
+          <li><span class="sn">2</span><div><strong>Convite automático no Google Calendar</strong><em>Com link do Google Meet incluso</em></div></li>
+          <li><span class="sn">3</span><div><strong>Demonstração ao vivo (30 min)</strong><em>Agentes reais respondendo cenários do seu negócio</em></div></li>
+          <li><span class="sn">4</span><div><strong>Proposta personalizada em 24h</strong><em>Escopo, prazo e ROI estimado</em></div></li>
+        </ul>
+      </div>
+      <div class="sched-card rv d1">
+        <div id="form-body">
+          <h3>Agendar demonstração gratuita</h3>
+          <p>Reunião online de 30 min via Google Meet</p>
+          <div class="fg"><label for="sn">Nome completo *</label><input type="text" id="sn" placeholder="Ex: João Silva" autocomplete="name"></div>
+          <div class="fg2">
+            <div class="fg"><label for="se">E-mail *</label><input type="email" id="se" placeholder="seu@email.com" autocomplete="email"></div>
+            <div class="fg"><label for="sw">WhatsApp</label><input type="tel" id="sw" placeholder="(16) 99999-9999" autocomplete="tel"></div>
+          </div>
+          <div class="fg"><label for="sc">Empresa</label><input type="text" id="sc" placeholder="Nome da sua empresa" autocomplete="organization"></div>
+          <div class="fg"><label for="si">Interesse principal *</label>
+            <select id="si">
+              <option value="">Selecione...</option>
+              <option>Agente de Vendas no WhatsApp</option>
+              <option>Atendimento com IA (chatbot)</option>
+              <option>IA Empresarial / base de conhecimento</option>
+              <option>Automação de Processos</option>
+              <option>PDV / Totem de Autoatendimento</option>
+              <option>GLPI + WhatsApp</option>
+              <option>Integração de Sistemas</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="fg"><label for="sd">Data desejada *</label><input type="date" id="sd"></div>
+          <div class="fg">
+            <label>Horário disponível *</label>
+            <div class="slots" id="slots">
+              <button class="sl" data-t="09:00">09:00</button>
+              <button class="sl" data-t="09:30">09:30</button>
+              <button class="sl" data-t="10:00">10:00</button>
+              <button class="sl" data-t="10:30">10:30</button>
+              <button class="sl taken" disabled>11:00</button>
+              <button class="sl" data-t="11:30">11:30</button>
+              <button class="sl taken" disabled>14:00</button>
+              <button class="sl" data-t="14:30">14:30</button>
+              <button class="sl" data-t="15:00">15:00</button>
+              <button class="sl" data-t="15:30">15:30</button>
+              <button class="sl taken" disabled>16:00</button>
+              <button class="sl" data-t="16:30">16:30</button>
+            </div>
+          </div>
+          <div class="fg"><label for="sm">Mensagem (opcional)</label><textarea id="sm" placeholder="Descreva brevemente seu desafio ou operação..."></textarea></div>
+          <button id="btn-sched" class="btn btn-p btn-full">Confirmar Agendamento →</button>
+          <div class="gcal">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" fill="#4285F4"/><rect x="3" y="9" width="18" height="2" fill="#fff"/><rect x="8" y="2" width="2" height="5" rx="1" fill="#4285F4"/><rect x="14" y="2" width="2" height="5" rx="1" fill="#4285F4"/></svg>
+            Convite adicionado ao Google Calendar com link do Google Meet
+          </div>
+        </div>
+        <div id="ok">
+          <div class="ok-ico">✓</div>
+          <h3>Demonstração confirmada!</h3>
+          <p id="ok-txt"></p>
+          <button id="btn-reset" class="btn btn-o">Agendar outro horário</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SOBRE ═══ -->
+<section id="sobre" class="sec sec-alt">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">06</span><span class="sec-line"></span><span>Quem Está por Trás</span></div>
+    <div class="about-inner">
+      <div class="about-img rv">
+        <img src="foto fabricio.jpg" alt="Fabrício Muaca Miguel — Co-fundador e CEO da INOVOXA" loading="lazy">
+        <div class="about-badge"><strong>Fabrício Muaca Miguel</strong><span>Co-fundador &amp; CEO — INOVOXA</span></div>
+      </div>
+      <div class="about-copy rv d1">
+        <h2>Engenharia de verdade, <em class="grad">não hype.</em></h2>
+        <p>Fabrício Muaca Miguel é Analista de Sistemas com MBA em Informação, Tecnologia e Inovação para Negócios pela UFSCar. São <strong>9 anos de experiência em TI</strong> atendendo a Prefeitura Municipal de Araraquara-SP antes de fundar a INOVOXA.</p>
+        <p>A missão: democratizar o acesso à inteligência artificial aplicada — com sistemas que rodam em produção, integrados aos processos reais de cada empresa.</p>
+        <div class="stats">
+          <div class="stat rv"><strong data-count="9" data-suffix="+">0</strong><p>anos em TI</p></div>
+          <div class="stat rv d1"><strong data-count="50" data-suffix="+">0</strong><p>projetos entregues</p></div>
+          <div class="stat rv d2"><strong data-count="24" data-suffix="/7">0</strong><p>suporte a clientes</p></div>
+          <div class="stat rv d3"><strong data-count="100" data-suffix="%">0</strong><p>foco em resultado</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA FINAL ═══ -->
+<section id="contato" class="sec cta-final">
+  <div class="wrap">
+    <div class="cta-box rv">
+      <h2>Pronto para ter uma equipe de IA <em class="grad">trabalhando por você?</em></h2>
+      <p>Comece com 7 dias grátis ou agende uma demonstração — em 30 minutos você vê os agentes operando cenários reais do seu negócio.</p>
+      <div class="hero-btns">
+        <a href="https://chat.inovoxa.com.br/" target="_blank" rel="noopener" class="btn btn-p">Testar Grátis por 7 Dias</a>
+        <a href="#demo" class="btn btn-s">Agendar Demonstração</a>
+      </div>
+      <div class="cta-contacts">
+        <a href="https://api.whatsapp.com/send/?phone=5516981249881&text=Ol%C3%A1!%20Vim%20do%20site%20INOVOXA%20e%20quero%20saber%20mais..." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/></svg>(16) 98124-9881</a>
+        <a href="mailto:suporte@inovoxa.com.br"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.7"/></svg>suporte@inovoxa.com.br</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="wrap foot-inner">
+    <img src="_logo.png" alt="INOVOXA" class="foot-logo">
+    <p>© 2026 INOVOXA — Agentes de IA para empresas em crescimento</p>
+    <p>CNPJ: 51.849.544/0001-63 · Araraquara – SP</p>
+    <p><a href="https://inovoxa.com.br/termo-de-uso">Termos de Uso e Política de Privacidade</a></p>
+  </div>
+</footer>
+
+<!-- ═══ WHATSAPP FLUTUANTE ═══ -->
+<a href="https://api.whatsapp.com/send/?phone=5516981249881&text=Ol%C3%A1!%20Vim%20do%20site%20INOVOXA%20e%20quero%20saber%20mais..." target="_blank" rel="noopener" class="wa-float" title="Falar no WhatsApp" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/></svg>
+</a>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

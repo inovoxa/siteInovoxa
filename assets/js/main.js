@@ -391,6 +391,41 @@
       `Demonstração para <strong>${d}/${m}/${y} às ${chosenSlot}</strong> registrada!<br>O Google Calendar foi aberto — adicione o evento ao seu calendário. Em seguida você recebe a confirmação no WhatsApp.`;
   });
 
+  /* ── COMPARTILHAR (blog) ── */
+  const shareBar = document.querySelector('.share-bar');
+  if (shareBar) {
+    const url = location.href.split('#')[0];
+    const title = (document.title.split('—')[0] || document.title).trim();
+    const enc = encodeURIComponent;
+    const links = {
+      whatsapp: 'https://api.whatsapp.com/send?text=' + enc(title + ' ' + url),
+      linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + enc(url),
+      x: 'https://twitter.com/intent/tweet?text=' + enc(title) + '&url=' + enc(url),
+      facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + enc(url)
+    };
+    shareBar.querySelectorAll('a[data-share]').forEach(a => {
+      const href = links[a.dataset.share];
+      if (href) { a.href = href; a.target = '_blank'; a.rel = 'noopener'; }
+    });
+    const nativeBtn = shareBar.querySelector('[data-share="native"]');
+    if (nativeBtn) {
+      if (navigator.share) {
+        nativeBtn.addEventListener('click', () => navigator.share({ title, url }).catch(() => {}));
+      } else {
+        nativeBtn.style.display = 'none'; // desktop sem suporte → esconde
+      }
+    }
+    const copyBtn = shareBar.querySelector('[data-share="copy"]');
+    if (copyBtn) copyBtn.addEventListener('click', async () => {
+      const txt = copyBtn.querySelector('.share-txt') || copyBtn;
+      try {
+        await navigator.clipboard.writeText(url);
+        const old = txt.textContent; txt.textContent = 'Copiado!';
+        setTimeout(() => { txt.textContent = old; }, 1600);
+      } catch (e) { /* clipboard indisponível */ }
+    });
+  }
+
   const btnReset = document.getElementById('btn-reset');
   if (btnReset) btnReset.addEventListener('click', () => {
     document.getElementById('form-body').style.display = 'block';

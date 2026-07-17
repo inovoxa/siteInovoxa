@@ -13,6 +13,7 @@
   --blue:#5b7fde;
   --violet:#8b6cf0;
   --grad:linear-gradient(100deg,var(--teal) 0%,#3fc0e8 45%,var(--blue) 100%);
+  --grad-btn:linear-gradient(100deg,#007e6b 0%,#1c72ab 52%,#3a54c4 100%);
   --font-d:'Sora',sans-serif;
   --font-b:'Inter',sans-serif;
   --font-m:'JetBrains Mono',monospace;
@@ -50,8 +51,8 @@ h1,h2,h3{font-family:var(--font-d);letter-spacing:-.02em}
 #nav ul a:not(.nav-cta)::after{content:'';position:absolute;left:0;bottom:-5px;height:2px;width:0;background:var(--grad);border-radius:2px;transition:width .3s var(--ease)}
 #nav ul a:hover{color:var(--ink)}
 #nav ul a:not(.nav-cta):hover::after{width:100%}
-.nav-cta{color:var(--bg)!important;background:var(--grad);padding:.6rem 1.4rem;border-radius:10px;font-weight:700;box-shadow:0 4px 22px rgba(0,229,195,.22);transition:transform .25s var(--ease),box-shadow .25s!important}
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,229,195,.35)}
+.nav-cta{color:#fff!important;background:var(--grad-btn);text-shadow:0 1px 2px rgba(0,0,0,.2);padding:.6rem 1.4rem;border-radius:10px;font-weight:700;box-shadow:0 4px 20px rgba(0,150,170,.25);transition:transform .25s var(--ease),box-shadow .25s!important}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,150,170,.38)}
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
 .hamburger span{width:24px;height:2px;background:var(--ink);border-radius:2px;transition:all .3s}
 .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
@@ -61,8 +62,8 @@ h1,h2,h3{font-family:var(--font-d);letter-spacing:-.02em}
 /* ═══ BOTÕES ═══ */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;padding:.95rem 2rem;border-radius:12px;font-family:var(--font-b);font-weight:700;font-size:.95rem;text-decoration:none;border:none;cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s,background .25s;will-change:transform}
 .btn svg{width:15px;height:15px;transition:transform .25s var(--ease)}
-.btn-p{background:var(--grad);color:#03110d;box-shadow:0 6px 28px rgba(0,229,195,.25)}
-.btn-p:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(0,229,195,.4)}
+.btn-p{background:var(--grad-btn);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.22);box-shadow:0 6px 24px rgba(0,150,170,.28)}
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 14px 38px rgba(0,150,170,.42)}
 .btn-p:hover svg{transform:translateX(4px)}
 .btn-s{background:rgba(255,255,255,.06);border:1px solid var(--stroke);color:var(--ink);backdrop-filter:blur(8px)}
 .btn-s:hover{background:rgba(255,255,255,.11);transform:translateY(-2px)}

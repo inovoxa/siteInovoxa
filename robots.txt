@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /materiais/
 
 Sitemap: https://inovoxa.com.br/sitemap.xml

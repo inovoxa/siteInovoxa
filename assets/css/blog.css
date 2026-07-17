@@ -74,6 +74,20 @@
 .article-cta p{color:var(--mut);margin-bottom:1.5rem;max-width:480px;margin-left:auto;margin-right:auto}
 .article-cta .hero-btns{justify-content:center}
 
+/* ── Isca digital / captura ── */
+.lm-box{margin:2.6rem 0;background:linear-gradient(135deg,rgba(0,229,195,.09),rgba(91,127,222,.07));border:1px solid rgba(0,229,195,.3);border-radius:var(--r);padding:1.8rem 1.9rem;display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap}
+.lm-ico{font-size:2.2rem;line-height:1}
+.lm-body{flex:1;min-width:230px}
+.lm-body strong{display:block;font-family:var(--font-d);font-size:1.12rem;color:var(--ink);margin-bottom:.3rem}
+.lm-body p{margin:0;color:var(--mut);font-size:.93rem;line-height:1.55}
+.lm-box .btn{white-space:nowrap}
+.lm-note{font-family:var(--font-m);font-size:.78rem;color:var(--dim);margin-top:.9rem}
+.lp-hero{text-align:center;max-width:680px;margin:0 auto 3rem}
+.lp-hero h1{font-family:var(--font-d);font-size:clamp(2rem,5vw,3rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:1.1rem}
+.lp-hero .lede{color:var(--mut);font-size:1.12rem;line-height:1.7;margin-bottom:1.8rem}
+.lp-card{max-width:680px;margin:0 auto 2.2rem;background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r);padding:1.9rem 2rem}
+.lp-card h2{font-family:var(--font-d);font-size:1.3rem;margin-bottom:1.1rem}
+
 /* Compartilhar */
 .share-bar{display:flex;align-items:center;flex-wrap:wrap;gap:.55rem;margin:2.6rem 0 0;padding-top:1.8rem;border-top:1px solid var(--stroke)}
 .share-label{font-family:var(--font-m);font-size:.82rem;color:var(--dim);margin-right:.35rem}

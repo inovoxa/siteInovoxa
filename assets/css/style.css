@@ -295,6 +295,10 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
 footer p{color:var(--dim);font-size:.82rem;margin-bottom:.35rem}
 footer a{color:var(--dim);text-decoration:none;transition:color .25s}
 footer a:hover{color:var(--teal)}
+.foot-social{display:flex;justify-content:center;gap:.7rem;margin:0 0 1.4rem}
+.foot-social a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid var(--stroke);color:var(--mut);transition:color .25s var(--ease),border-color .25s var(--ease),background .25s var(--ease),transform .25s var(--ease)}
+.foot-social a:hover{color:var(--teal);border-color:rgba(0,229,195,.4);background:rgba(0,229,195,.07);transform:translateY(-2px)}
+.foot-social svg{width:17px;height:17px}
 
 /* ═══ WHATSAPP FLUTUANTE ═══ */
 .wa-float{position:fixed;bottom:24px;right:24px;z-index:99;width:60px;height:60px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(37,211,102,.35);transition:transform .3s var(--ease),box-shadow .3s;color:#fff}

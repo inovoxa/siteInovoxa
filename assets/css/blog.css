@@ -49,6 +49,12 @@
 .prose p{margin:0 0 1.25rem}
 .prose a{color:var(--teal);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;transition:opacity .2s}
 .prose a:hover{opacity:.75}
+/* botões dentro da prosa não devem herdar o estilo de link (teal + sublinhado) */
+.prose a.btn{text-decoration:none}
+.prose a.btn-p{color:#fff}
+.prose a.btn-s{color:var(--ink)}
+.prose a.btn-o{color:var(--teal)}
+.prose a.btn:hover{opacity:1}
 .prose strong{color:var(--ink);font-weight:600}
 .prose ul,.prose ol{margin:0 0 1.4rem;padding-left:0;list-style:none}
 .prose ul li,.prose ol li{position:relative;padding-left:1.7rem;margin-bottom:.7rem}

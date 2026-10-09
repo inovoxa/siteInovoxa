@@ -318,79 +318,6 @@
   const phone = document.getElementById('phone');
   if (phone && chat) phoneObs.observe(phone);
 
-  /* ══════════════════════════════════════════════
-     AGENDAMENTO — Google Calendar + WhatsApp
-     ══════════════════════════════════════════════ */
-  const dateInput = document.getElementById('sd');
-  if (dateInput) {
-    const today = new Date();
-    const minDate = new Date();
-    minDate.setDate(today.getDate() + 1);
-    while (minDate.getDay() === 0 || minDate.getDay() === 6) {
-      minDate.setDate(minDate.getDate() + 1);
-    }
-    const iso = minDate.toISOString().split('T')[0];
-    dateInput.min = iso;
-    dateInput.value = iso;
-    dateInput.addEventListener('change', function () {
-      if (!this.value) return;
-      const d = new Date(this.value + 'T12:00:00');
-      if (d.getDay() === 0 || d.getDay() === 6) {
-        alert('Por favor, selecione um dia útil (segunda a sexta-feira).');
-        this.value = '';
-      }
-    });
-  }
-
-  let chosenSlot = '';
-  document.querySelectorAll('.sl[data-t]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.sl').forEach(b => b.classList.remove('on'));
-      btn.classList.add('on');
-      chosenSlot = btn.dataset.t;
-    });
-  });
-
-  const btnSched = document.getElementById('btn-sched');
-  if (btnSched) btnSched.addEventListener('click', () => {
-    const n = document.getElementById('sn').value.trim();
-    const e = document.getElementById('se').value.trim();
-    const interest = document.getElementById('si').value;
-    const date = document.getElementById('sd').value;
-    if (!n || !e || !interest || !date || !chosenSlot) {
-      alert('Preencha todos os campos obrigatórios (*) e escolha um horário.');
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { alert('E-mail inválido.'); return; }
-
-    const [y, m, d] = date.split('-');
-    const [h, mi] = chosenSlot.split(':');
-    const st = `${y}${m}${d}T${h}${mi}00`;
-    const ed = new Date(date + 'T' + chosenSlot);
-    ed.setMinutes(ed.getMinutes() + 30);
-    const eh = String(ed.getHours()).padStart(2, '0');
-    const emi = String(ed.getMinutes()).padStart(2, '0');
-    const et = `${y}${m}${d}T${eh}${emi}00`;
-
-    const comp = document.getElementById('sc').value.trim() || 'Não informado';
-    const phone = document.getElementById('sw').value.trim() || 'Não informado';
-    const msg = document.getElementById('sm').value.trim();
-    const details = `Demonstração INOVOXA\n\nCliente: ${n}\nEmpresa: ${comp}\nWhatsApp: ${phone}\nInteresse: ${interest}${msg ? '\nMensagem: ' + msg : ''}`;
-
-    const gcal = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Demonstração INOVOXA | ' + interest)}&dates=${st}/${et}&details=${encodeURIComponent(details)}&add=suporte%40inovoxa.com.br&sf=true`;
-    window.open(gcal, '_blank');
-
-    const waMsg = `Olá! Agendei uma demonstração.\n*Nome:* ${n}\n*Data:* ${d}/${m}/${y} às ${chosenSlot}\n*Interesse:* ${interest}\n*Empresa:* ${comp}${msg ? '\n*Mensagem:* ' + msg : ''}`;
-    setTimeout(() => {
-      window.open(`https://api.whatsapp.com/send/?phone=5516981249881&text=${encodeURIComponent(waMsg)}`, '_blank');
-    }, 1500);
-
-    document.getElementById('form-body').style.display = 'none';
-    document.getElementById('ok').classList.add('show');
-    document.getElementById('ok-txt').innerHTML =
-      `Demonstração para <strong>${d}/${m}/${y} às ${chosenSlot}</strong> registrada!<br>O Google Calendar foi aberto — adicione o evento ao seu calendário. Em seguida você recebe a confirmação no WhatsApp.`;
-  });
-
   /* ── COMPARTILHAR (blog) ── */
   const shareBar = document.querySelector('.share-bar');
   if (shareBar) {
@@ -425,16 +352,5 @@
       } catch (e) { /* clipboard indisponível */ }
     });
   }
-
-  const btnReset = document.getElementById('btn-reset');
-  if (btnReset) btnReset.addEventListener('click', () => {
-    document.getElementById('form-body').style.display = 'block';
-    document.getElementById('ok').classList.remove('show');
-    ['sn', 'se', 'sw', 'sc', 'sm'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('si').value = '';
-    chosenSlot = '';
-    document.querySelectorAll('.sl').forEach(b => b.classList.remove('on'));
-    dateInput.value = dateInput.min;
-  });
 
 })();
